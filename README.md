@@ -37,7 +37,6 @@ Bu proje aşağıdaki teknoloji yığını ve mimari prensipler kullanılarak ge
 *   **Önyüz (Frontend):** HTML5, CSS3, Bootstrap, JavaScript
 *   **Geliştirme Ortamı:** Visual Studio Code / Visual Studio
 
-## Proje Yapısı ve Mimari<img width="1896" height="911" alt="Ekran görüntüsü 2026-01-20 231541" src="https://github.com/user-attachments/assets/3a886c8b-c572-4f00-b624-30911f71bca6" />
 
 Proje, **MVC (Model-View-Controller)** mimarisine tam uyumlu olarak geliştirilmiştir:
 *   📁 **Models:** Veritabanı tablolarına karşılık gelen sınıflar (User, Customer, Project, createProposal vb.) burada bulunur.
@@ -50,7 +49,14 @@ Proje, **MVC (Model-View-Controller)** mimarisine tam uyumlu olarak geliştirilm
 
 
 
+
+
+
 <img width="1919" height="907" alt="Ekran görüntüsü 2026-01-20 231605" src="https://github.com/user-attachments/assets/c5fd9249-de62-41da-86d2-5577cd89ce13" />
+
+
+
+
 
 
 
@@ -60,11 +66,27 @@ Proje, **MVC (Model-View-Controller)** mimarisine tam uyumlu olarak geliştirilm
 
 
 
+
+
+
 <img width="1902" height="909" alt="Ekran görüntüsü 2026-01-20 231647" src="https://github.com/user-attachments/assets/7b0ccef2-0255-49c4-a6ad-6a3a03c3481e" />
 
 
 
+
+
+
+
 <img width="1891" height="899" alt="Ekran görüntüsü 2026-01-20 231703" src="https://github.com/user-attachments/assets/282e4729-79e2-4026-af28-025a06c06ba9" />
+
+
+
+
+
+
+
+
+
 
 
 
