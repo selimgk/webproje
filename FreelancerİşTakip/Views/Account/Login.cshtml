@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-dark text-white text-center py-4">
+                <h3 class="mb-0">
+                    WorkFlow<span style="color:#FFD700;">X</span>
+                </h3>
+                <small class="text-muted text-uppercase" style="letter-spacing: 2px;">Personel Girişi</small>
+            </div>
+            <div class="card-body p-4">
+                @if(ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+
+                <form asp-action="Login" method="post">
+                    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Kullanıcı Adı</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
+                            <input type="text" name="username" class="form-control border-start-0" placeholder="Kullanıcı Adınız" required autofocus />
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Şifre</label>
+                        <div class="input-group">
+                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="password" class="form-control border-start-0" placeholder="••••••" required />
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mb-3">
+                        <button type="submit" class="btn btn-warning btn-lg fw-bold text-dark shadow-sm">
+                            GİRİŞ YAP <i class="bi bi-arrow-right-short"></i>
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <span class="text-muted small">Hesabınız yok mu?</span>
+                        <a asp-action="Register" class="text-decoration-none fw-bold text-dark small">Kayıt Ol</a>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-light py-3 border-0">
+                <small class="text-muted">&copy; 2026 WorkFlowX Project System</small>
+            </div>
+        </div>
+    </div>
+</div>

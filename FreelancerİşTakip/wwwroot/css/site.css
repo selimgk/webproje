@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+    /* --- COLOR PALETTE: PROFESSIONAL YELLOW/BLACK --- */
+    /* Primary (Brand) */
+    --primary-yellow: #FFC107;
+    /* Standard, professional amber/yellow */
+    --primary-yellow-hover: #FFB300;
+
+    /* Neutrals */
+    --bg-body: #F9FAFB;
+    /* Very light gray, professional SaaS background */
+    --bg-surface: #FFFFFF;
+    /* Pure white for cards/surfaces */
+
+    --text-main: #111827;
+    /* Near black - sharp and legible */
+    --text-muted: #6B7280;
+    /* Professional gray */
+    --text-on-dark: #F3F4F6;
+
+    --border-color: #E5E7EB;
+    /* Subtle borders */
+
+    --dark-surface: #1F2937;
+    /* Dark gray for footer/navbar */
+    --dark-surface-lighter: #374151;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+}
+
+/* --- RESET & LAYOUT --- */
+/* Sticky Footer: The Robust Method */
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Flex wrapper to handle main content */
+.d-flex.flex-column.min-vh-100 {
+    min-height: 100vh !important;
+}
+
+main {
+    flex: 1 0 auto;
+    /* Grow to fill space, pushing footer down */
+    width: 100%;
+}
+
+/* --- TYPOGRAPHY --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text-main);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    /* Modern tight tracking */
+    margin-bottom: 0.75em;
+}
+
+.font-playfair {
+    font-family: 'Playfair Display', serif;
+}
+
+/* --- COMPONENTS --- */
+
+/* Navbar */
+.navbar-custom {
+    background-color: var(--dark-surface);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--bg-surface) !important;
+}
+
+.navbar-brand span {
+    color: var(--primary-yellow);
+}
+
+.nav-link {
+    color: #9CA3AF !important;
+    /* Light gray */
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-yellow) !important;
+}
+
+/* Cards */
+.card-pro {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+}
+
+.card-pro:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-yellow);
+}
+
+.card-header-pro {
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem;
+}
+
+.card-body-pro {
+    padding: 1.5rem;
+}
+
+/* Buttons */
+.btn-primary-pro {
+    background-color: var(--text-main);
+    color: var(--bg-surface);
+    border: none;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+}
+
+.btn-primary-pro:hover {
+    background-color: #000;
+    color: var(--primary-yellow);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-accent {
+    background-color: var(--primary-yellow);
+    color: var(--text-main);
+    font-weight: 600;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+}
+
+.btn-accent:hover {
+    background-color: var(--primary-yellow-hover);
+    color: #000;
+}
+
+/* Tables */
+.table-pro {
+    background: var(--bg-surface);
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.table-pro th {
+    background-color: #F3F4F6;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table-pro td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+    color: var(--text-main);
+}
+
+.table-pro tr:last-child td {
+    border-bottom: none;
+}
+
+/* Footer */
+.footer-pro {
+    background-color: var(--dark-surface);
+    color: #9CA3AF;
+    padding: 3rem 0;
+    margin-top: auto;
+    /* Push to bottom */
+    width: 100%;
+    border-top: 1px solid var(--dark-surface-lighter);
+}
+
+.footer-pro a {
+    color: #D1D5DB;
+    text-decoration: none;
+}
+
+.footer-pro a:hover {
+    color: var(--primary-yellow);
+}
+
+/* Utilities */
+.text-accent {
+    color: var(--primary-yellow);
+}
+
+.bg-light-gray {
+    background-color: #F3F4F6;
+}

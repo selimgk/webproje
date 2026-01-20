@@ -1,0 +1,87 @@
+@model FreelancerİşTakip.Models.Proposal
+@{
+    Layout = null; // No layout for clean printing
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Sözleşme Özeti - @Model.Title</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body { padding: 40px; font-family: 'Times New Roman', Times, serif; }
+        .contract-header { text-align: center; margin-bottom: 50px; border-bottom: 2px solid #000; padding-bottom: 20px; }
+        .section-title { font-weight: bold; background-color: #f8f9fa; padding: 10px; border-left: 5px solid #ffc107; margin-top: 30px; }
+        .signature-box { margin-top: 100px; display: flex; justify-content: space-between; }
+        .signature-line { width: 40%; border-top: 1px solid #000; padding-top: 10px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="contract-header">
+            <h1>HİZMET SÖZLEŞMESİ ÖZETİ</h1>
+            <p>Tarih: @DateTime.Today.ToShortDateString()</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Hizmet Sağlayıcı</h4>
+                <p><strong>Firma Adı:</strong> CRM & Proposal System A.Ş.</p>
+                <p><strong>Adres:</strong> Teknopark, B Blok No:12</p>
+                <p><strong>Yetkili:</strong> Sistem Yöneticisi</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <h4>Müşteri</h4>
+                <p><strong>Firma Adı:</strong> @(Model.Customer?.CompanyName ?? "-")</p>
+                <p><strong>Yetkili:</strong> @(Model.Customer?.ContactName ?? "-")</p>
+                <p><strong>Email:</strong> @(Model.Customer?.Email ?? "-")</p>
+            </div>
+        </div>
+
+        <div class="section-title">1. KONU VE KAPSAM</div>
+        <p>İşbu sözleşmenin konusu, aşağıda detayları belirtilen <strong>"@Model.Title"</strong> işinin yapılmasıdır.</p>
+        <p><strong>Kapsam Detayları:</strong></p>
+        <div class="p-3 border rounded bg-light">
+            <p style="white-space: pre-wrap;">@Model.ScopeText</p>
+        </div>
+
+        <div class="section-title">2. MALİ HÜKÜMLER VE SÜRE</div>
+        <table class="table table-bordered mt-3">
+            <tr>
+                <th>Toplam Hizmet Bedeli</th>
+                <td>@Model.OfferedPrice @Model.Currency</td>
+            </tr>
+            <tr>
+                <th>Teslim Süresi</th>
+                <td>@Model.DeliveryDays İş Günü</td>
+            </tr>
+            <tr>
+                <th>Revizyon Hakkı</th>
+                <td>@Model.RevisionLimit Adet</td>
+            </tr>
+        </table>
+
+         <div class="section-title">3. ÖZEL NOTLAR</div>
+        <p>Bu sözleşme onayı ile proje başlangıcı yapılacaktır. Ödemeler proje tesliminde %100 olarak tahsil edilecektir.</p>
+
+        <div class="signature-box">
+            <div class="signature-line">
+                <p><strong>Hizmet Sağlayıcı</strong></p>
+                <p>CRM & Proposal System</p>
+            </div>
+             <div class="signature-line">
+                <p><strong>Müşteri</strong></p>
+                <p>@(Model.Customer?.CompanyName ?? Model.Customer?.Name)</p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5 d-print-none">
+            <button onclick="window.print()" class="btn btn-primary">Yazdır / PDF Kaydet</button>
+            <a href="javascript:history.back()" class="btn btn-secondary">Geri Dön</a>
+        </div>
+    </div>
+
+</body>
+</html>
+

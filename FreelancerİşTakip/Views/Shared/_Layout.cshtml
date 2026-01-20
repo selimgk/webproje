@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FreelancerİşTakip</title>
+    
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FreelancerİşTakip.styles.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3 shadow-sm">
+            <div class="container">
+                <!-- LOGO -->
+                <a class="navbar-brand d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-briefcase-fill text-accent"></i>
+                    <span>WORKFLOW<span class="text-accent">X</span></span>
+                </a>
+                
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-4">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">DASHBOARD</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Customers" asp-action="Index">MÜŞTERİLER</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Proposals" asp-action="Index">TEKLİFLER</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Projects" asp-action="Index">PROJELER</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Reports" asp-action="Index">RAPORLAR</a>
+                        </li>
+                    </ul>
+
+                    <div class="d-flex align-items-center gap-3">
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            <span class="text-white-50 small fw-bold">@User.Identity.Name</span>
+                            <a asp-controller="Account" asp-action="Logout" class="btn btn-sm btn-outline-light rounded-pill px-3">Çıkış</a>
+                        }
+                        else
+                        {
+                             <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-accent rounded-pill px-4 text-dark fw-bold">Giriş</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-grow-1 py-5">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="footer-pro">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <h5 class="text-white mb-2">WORKFLOW<span class="text-accent">X</span></h5>
+                    <p class="small mb-0">Professional CRM & Project Management Suite.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex gap-3 justify-content-center justify-content-md-end mb-2">
+                        <a href="#"><i class="bi bi-linkedin"></i></a>
+                        <a href="#"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#"><i class="bi bi-github"></i></a>
+                    </div>
+                    <span class="small opacity-50">&copy; 2026 CRM & Proposal. All Rights Reserved.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

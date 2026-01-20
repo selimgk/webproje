@@ -1,0 +1,31 @@
+@model FreelancerİşTakip.Models.Customer
+
+@{
+    ViewData["Title"] = "Müşteri Sil";
+}
+
+<h1>Müşteri Sil</h1>
+
+<div class="alert alert-danger">
+    <h3>Bu kaydı silmek istediğinize emin misiniz?</h3>
+    <p>Bu işlem geri alınamaz.</p>
+</div>
+
+<div>
+    <h4>@Model.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.ContactName)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.ContactName)</dd>
+        
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.Email)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.Email)</dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Sil" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    </form>
+</div>
+

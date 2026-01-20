@@ -1,0 +1,82 @@
+@model FreelancerİşTakip.Models.Proposal
+
+@{
+    ViewData["Title"] = "Teklif Detayı";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>@Model.Title</h1>
+    <div>
+        @if(Model.Status == FreelancerİşTakip.Models.ProposalStatus.Approved)
+        {
+            <a asp-controller="Projects" asp-action="CreateFromProposal" asp-route-proposalId="@Model.Id" class="btn btn-success">
+                <i class="bi bi-rocket-takeoff"></i> Projeye Dönüştür
+            </a>
+            <a asp-action="Contract" asp-route-id="@Model.Id" class="btn btn-outline-dark" target="_blank">
+                <i class="bi bi-file-earmark-pdf"></i> Sözleşme
+            </a>
+        }
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Düzenle</a>
+        <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm border-left-primary">
+            <div class="card-body">
+                <h5 class="card-title text-muted">Durum</h5>
+                @{
+                    var statusText = Model.Status switch {
+                        FreelancerİşTakip.Models.ProposalStatus.Draft => "Taslak",
+                        FreelancerİşTakip.Models.ProposalStatus.Sent => "Gönderildi",
+                        FreelancerİşTakip.Models.ProposalStatus.Approved => "Onaylandı",
+                        FreelancerİşTakip.Models.ProposalStatus.Rejected => "Reddedildi",
+                        FreelancerİşTakip.Models.ProposalStatus.Expired => "Süresi Doldu",
+                        _ => Model.Status.ToString()
+                    };
+                }
+                <h3>@statusText</h3>
+                @if(Model.SentAt.HasValue) { <p class="text-muted small">Gönderildi: @Model.SentAt.Value.ToShortDateString()</p> }
+                @if(Model.DecisionAt.HasValue) { <p class="text-muted small">Karar: @Model.DecisionAt.Value.ToShortDateString()</p> }
+                
+                @if(Model.Status == FreelancerİşTakip.Models.ProposalStatus.Rejected)
+                {
+                    <div class="alert alert-danger mt-2">
+                        <strong>Kayıp Nedeni:</strong> @(Model.LossReason?.Name ?? "-") <br/>
+                        <small>@Model.LossNote</small>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="card mb-4 shadow-sm">
+             <div class="card-header bg-dark text-white">Fiyat & Süre</div>
+             <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Teklif Edilen Fiyat
+                    <span class="badge bg-success rounded-pill">@Model.OfferedPrice ₺</span>
+                </li>
+                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Önerilen (Hesaplanan)
+                    <span class="text-muted">@Model.SuggestedPrice ₺</span>
+                </li>
+                <li class="list-group-item">Teslim: @Model.DeliveryDays Gün</li>
+                <li class="list-group-item">Revizyon Hakkı: @Model.RevisionLimit</li>
+             </ul>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-warning">Kapsam ve Detaylar</div>
+            <div class="card-body">
+                <h6>Müşteri: @(Model.Customer?.Name ?? "-")</h6>
+                <hr/>
+                <h6 class="text-secondary">Kapsam Metni</h6>
+                <p style="white-space: pre-wrap;">@Model.ScopeText</p>
+            </div>
+        </div>
+    </div>
+</div>
+

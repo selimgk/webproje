@@ -1,0 +1,139 @@
+@model FreelancerİşTakip.Models.Proposal
+
+@{
+    ViewData["Title"] = "Teklif Düzenle";
+}
+
+<h1>Teklif Düzenle</h1>
+<hr />
+<div class="row">
+    <div class="col-md-9">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="SentAt" />
+            <input type="hidden" asp-for="DecisionAt" />
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CustomerId" class="form-label"></label>
+                    <select asp-for="CustomerId" class="form-select" asp-items="ViewBag.CustomerId"></select>
+                    <span asp-validation-for="CustomerId" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Status & Loss Reason -->
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Status" class="form-label fw-bold"></label>
+                            <select asp-for="Status" class="form-select" id="statusSelect" onchange="toggleLossReason()">
+                                <option value="0">Taslak</option>
+                                <option value="1">Gönderildi</option>
+                                <option value="2">Onaylandı</option>
+                                <option value="3">Reddedildi</option>
+                                <option value="4">Süresi Doldu</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3" id="lossReasonDiv" style="display:none;">
+                            <label asp-for="LossReasonId" class="form-label text-danger">Kayıp Nedeni</label>
+                            <select asp-for="LossReasonId" class="form-select" asp-items="ViewBag.LossReasonId">
+                                <option value="">-- Seçiniz --</option>
+                            </select>
+                        </div>
+                         <div class="col-md-4 mb-3" id="lossNoteDiv" style="display:none;">
+                            <label asp-for="LossNote" class="form-label">Kayıp Notu</label>
+                            <input asp-for="LossNote" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-3 mb-3 border rounded">
+                <h5 class="text-warning">Fiyatlandırma</h5>
+                <div class="col-md-3 mb-3">
+                    <label asp-for="HourlyRate" class="form-label"></label>
+                    <input asp-for="HourlyRate" id="hourlyRate" class="form-control" oninput="calculatePrice()" />
+                    <span asp-validation-for="HourlyRate" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label asp-for="EstimatedHours" class="form-label"></label>
+                    <input asp-for="EstimatedHours" id="estimatedHours" class="form-control" oninput="calculatePrice()" />
+                    <span asp-validation-for="EstimatedHours" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label asp-for="SuggestedPrice" class="form-label fw-bold"></label>
+                    <input asp-for="SuggestedPrice" id="suggestedPrice" class="form-control" readonly />
+                </div>
+                 <div class="col-md-3 mb-3">
+                    <label asp-for="OfferedPrice" class="form-label fw-bold text-success"></label>
+                    <input asp-for="OfferedPrice" class="form-control" />
+                    <span asp-validation-for="OfferedPrice" class="text-danger"></span>
+                </div>
+            </div>
+
+             <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label asp-for="DeliveryDays" class="form-label"></label>
+                    <input asp-for="DeliveryDays" class="form-control" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label asp-for="RevisionLimit" class="form-label"></label>
+                    <input asp-for="RevisionLimit" class="form-control" />
+                </div>
+                 <div class="col-md-4 mb-3">
+                    <label asp-for="Currency" class="form-label"></label>
+                    <input asp-for="Currency" class="form-control" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ScopeText" class="form-label"></label>
+                <textarea asp-for="ScopeText" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="ScopeText" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Kaydet" class="btn btn-warning" />
+                <a asp-action="Index" class="btn btn-secondary">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function calculatePrice() {
+            var rate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+            var hours = parseFloat(document.getElementById('estimatedHours').value) || 0;
+            var total = rate * hours;
+            document.getElementById('suggestedPrice').value = total.toFixed(2);
+        }
+
+        function toggleLossReason() {
+            var status = document.getElementById('statusSelect').value;
+            // 3 corresponds to Rejected in Enum (0:Draft, 1:Sent, 2:Approved, 3:Rejected)
+            // Wait, value attributes in select might be 0,1,2,3 or string if TagHelper does it. 
+            // Hardcoded options above have values.
+            if (status === '3') {
+                document.getElementById('lossReasonDiv').style.display = 'block';
+                document.getElementById('lossNoteDiv').style.display = 'block';
+            } else {
+                document.getElementById('lossReasonDiv').style.display = 'none';
+                document.getElementById('lossNoteDiv').style.display = 'none';
+            }
+        }
+
+        // Run on load
+        toggleLossReason();
+    </script>
+}
+

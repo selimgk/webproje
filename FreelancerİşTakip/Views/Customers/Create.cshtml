@@ -1,0 +1,92 @@
+@model FreelancerİşTakip.Models.Customer
+
+@{
+    ViewData["Title"] = "Yeni Müşteri";
+}
+
+<div class="container my-5">
+    <div class="card shadow-lg border-0 overflow-hidden" style="border-radius: 20px;">
+        <div class="row g-0">
+            <!-- Form Section -->
+            <div class="col-lg-7 p-5 bg-white">
+                <div class="mb-4">
+                    <h5 class="text-uppercase text-muted letter-spacing-2 small fw-bold">Management</h5>
+                    <h2 class="fw-black display-6">Yeni Müşteri Oluştur</h2>
+                </div>
+                
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label fw-bold small text-muted text-uppercase">Müşteri/Firma Adı</label>
+                        <input asp-for="Name" class="form-control form-control-lg bg-light border-0" placeholder="Örn. Acme Corp" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="ContactName" class="form-label fw-bold small text-muted text-uppercase">Yetkili Kişi</label>
+                            <input asp-for="ContactName" class="form-control bg-light border-0" placeholder="Ad Soyad" />
+                            <span asp-validation-for="ContactName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="CompanyName" class="form-label fw-bold small text-muted text-uppercase">Ticari Firma Ünvanı</label>
+                            <input asp-for="CompanyName" class="form-control bg-light border-0" placeholder="Opsiyonel" />
+                            <span asp-validation-for="CompanyName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                     <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Email" class="form-label fw-bold small text-muted text-uppercase">E-Posta Adresi</label>
+                            <input asp-for="Email" class="form-control bg-light border-0" placeholder="mail@example.com" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Phone" class="form-label fw-bold small text-muted text-uppercase">Telefon</label>
+                            <input asp-for="Phone" class="form-control bg-light border-0" placeholder="+90 555 000 0000" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Notes" class="form-label fw-bold small text-muted text-uppercase">Notlar</label>
+                        <textarea asp-for="Notes" class="form-control bg-light border-0" rows="3" placeholder="Müşteri hakkında kısa notlar..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                        <a asp-action="Index" class="btn btn-light px-4 rounded-pill fw-bold">İptal</a>
+                        <button type="submit" class="btn btn-warning px-5 rounded-pill fw-bold shadow-sm">Müşteriyi Kaydet</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Visual Section -->
+            <div class="col-lg-5 d-none d-lg-block position-relative">
+                <div class="h-100 w-100" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center;">
+                    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));"></div>
+                    <div class="position-absolute bottom-0 start-0 p-5 text-white">
+                        <h3 class="fw-bold">Büyüyen İlişkiler.</h3>
+                        <p class="small opacity-75">Müşteri ilişkileri yönetimi, başarının temelidir. Her detayı kaydedin.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .letter-spacing-2 { letter-spacing: 2px; }
+    .fw-black { font-weight: 900; }
+    .form-control:focus {
+        box-shadow: none;
+        background-color: #fff !important;
+        border: 1px solid #ffc107 !important;
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

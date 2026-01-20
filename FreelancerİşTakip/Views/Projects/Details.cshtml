@@ -1,0 +1,230 @@
+@model FreelancerİşTakip.Models.Project
+
+@{
+    ViewData["Title"] = "Proje Paneli";
+    var totalTime = Model.TimeLogs?.Sum(x => x.Minutes) ?? 0;
+    var totalHours = (totalTime / 60.0).ToString("F1");
+}
+
+<h1>Proje Paneli: @Model.ProjectName</h1>
+<div class="mb-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">Ayarları Düzenle</a>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Projeler Listesi</a>
+</div>
+
+<!-- INFO CARDS -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-light text-dark shadow-sm">
+            <div class="card-body text-center">
+                <h5>Müşteri</h5>
+                <p class="fw-bold">@Model.Customer?.Name</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+         <div class="card bg-light text-dark shadow-sm">
+            <div class="card-body text-center">
+                <h5>Durum</h5>
+                <span class="badge bg-primary">@Model.Status</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+         <div class="card bg-light text-dark shadow-sm">
+            <div class="card-body text-center">
+                <h5>Revizyonlar</h5>
+                <h4 class="text-danger">@Model.UsedRevisions / @Model.RevisionLimit</h4>
+                @if(Model.UsedRevisions < Model.RevisionLimit) {
+                    <form asp-action="UseRevision" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button class="btn btn-xs btn-warning text-dark">Kullan</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+         <div class="card bg-light text-dark shadow-sm">
+            <div class="card-body text-center">
+                <h5>Toplam Efor</h5>
+                <h4 class="text-success">@totalHours Saat</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- MILESTONES -->
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <span>Kilometre Taşları (Milestones)</span>
+                <button class="btn btn-sm btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#addMilestoneCollapse">
+                    <i class="bi bi-plus"></i> Ekle
+                </button>
+            </div>
+            
+            <div class="collapse p-3 bg-light border-bottom" id="addMilestoneCollapse">
+                <form asp-action="AddMilestone" method="post">
+                    <input type="hidden" name="projectId" value="@Model.Id" />
+                    <div class="input-group mb-2">
+                        <input type="text" name="title" class="form-control" placeholder="Başlık" required />
+                        <input type="date" name="dueDate" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <select name="status" class="form-select mb-2">
+                        <option value="Planned">Planlandı</option>
+                        <option value="InProgress">Devam Ediyor</option>
+                        <option value="Done">Tamamlandı</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success w-100">Kaydet</button>
+                </form>
+            </div>
+
+            <ul class="list-group list-group-flush">
+                @if(Model.Milestones != null)
+                {
+                    @foreach(var m in Model.Milestones)
+                {
+                    var badges = m.Status == FreelancerİşTakip.Models.MilestoneStatus.Done ? "bg-success" : 
+                                 (m.Status == FreelancerİşTakip.Models.MilestoneStatus.InProgress ? "bg-warning text-dark" : "bg-secondary");
+                    
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge @badges me-2">@m.Status</span>
+                            <strong>@m.Title</strong>
+                            <div class="text-muted small">@m.DueDate.ToShortDateString()</div>
+                        </div>
+                        <form asp-action="DeleteMilestone" method="post" onsubmit="return confirm('Silinsin mi?');">
+                             <input type="hidden" name="id" value="@m.Id" />
+                             <input type="hidden" name="projectId" value="@Model.Id" />
+                             <button type="submit" class="btn btn-sm btn-outline-danger border-0">
+                                 <i class="bi bi-trash"></i>
+                             </button>
+                        </form>
+                    </li>
+                }
+                }
+                
+            </ul>
+        </div>
+    </div>
+
+    <!-- TIMELOGS -->
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                <span>Zaman & Efor</span>
+                <button class="btn btn-sm btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#addTimeLogCollapse">
+                    <i class="bi bi-plus"></i> Ekle
+                </button>
+            </div>
+
+            <div class="collapse p-3 bg-light border-bottom" id="addTimeLogCollapse">
+                <form asp-action="AddTimeLog" method="post">
+                    <input type="hidden" name="projectId" value="@Model.Id" />
+                    <div class="input-group mb-2">
+                        <input type="text" name="description" class="form-control" placeholder="Yapılan iş..." required />
+                        <input type="number" name="minutes" class="form-control" placeholder="Dakika" style="max-width: 100px;" required />
+                    </div>
+                    <input type="date" name="workDate" class="form-control mb-2" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                    <button type="submit" class="btn btn-sm btn-success w-100">Kaydet</button>
+                </form>
+            </div>
+
+            <div class="list-group list-group-flush" style="max-height: 400px; overflow-y:auto;">
+                 @if(Model.TimeLogs != null)
+                 {
+                     @foreach(var t in Model.TimeLogs)
+                {
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">@t.Description</h6>
+                            <small class="text-muted">@t.WorkDate.ToShortDateString()</small>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between align-items-center mt-1">
+                             <p class="mb-1 text-primary fw-bold">@t.Minutes dk</p>
+                             <form asp-action="DeleteTimeLog" method="post" onsubmit="return confirm('Silinsin mi?');" class="m-0 p-0">
+                                 <input type="hidden" name="id" value="@t.Id" />
+                                 <input type="hidden" name="projectId" value="@Model.Id" />
+                                 <button type="submit" class="btn btn-sm btn-link text-danger p-0">
+                                     <i class="bi bi-x-circle"></i>
+                                 </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                }
+            </div>
+        </div>
+    </div>
+    <!-- FILES -->
+    <div class="col-12 mt-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-paperclip"></i> Proje Dosyaları</span>
+                <button class="btn btn-sm btn-light text-secondary fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#uploadFileCollapse">
+                    <i class="bi bi-cloud-upload"></i> Dosya Yükle
+                </button>
+            </div>
+
+            <div class="collapse p-3 bg-light border-bottom" id="uploadFileCollapse">
+                <form asp-action="UploadFile" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="projectId" value="@Model.Id" />
+                    <div class="input-group">
+                        <input type="file" name="file" class="form-control" required />
+                        <button type="submit" class="btn btn-success">Yükle</button>
+                    </div>
+                    <small class="text-muted">Maksimum dosya boyutu: 10MB</small>
+                </form>
+            </div>
+
+            @if(Model.ProjectFiles != null && Model.ProjectFiles.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Dosya Adı</th>
+                                <th>Yükleyen</th>
+                                <th>Tarih</th>
+                                <th class="text-end">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var f in Model.ProjectFiles)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@f.FilePath" target="_blank" class="text-decoration-none fw-bold text-dark">
+                                            <i class="bi bi-file-earmark-text me-2"></i>@f.FileName
+                                        </a>
+                                    </td>
+                                    <td>@f.UploadedBy</td>
+                                    <td>@f.UploadedAt.ToString("g")</td>
+                                    <td class="text-end">
+                                        <form asp-action="DeleteFile" method="post" onsubmit="return confirm('Dosya silinsin mi?');" class="d-inline">
+                                            <input type="hidden" name="id" value="@f.Id" />
+                                            <input type="hidden" name="projectId" value="@Model.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger border-0">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="p-4 text-center text-muted">
+                    <i class="bi bi-folder2-open display-4"></i>
+                    <p class="mt-2">Henüz dosya yüklenmemiş.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

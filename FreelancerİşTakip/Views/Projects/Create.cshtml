@@ -1,0 +1,77 @@
+@model FreelancerİşTakip.Models.Project
+
+@{
+    ViewData["Title"] = "Yeni Proje";
+}
+
+<h1>Yeni Proje Oluştur</h1>
+
+<h4>Proje Bilgileri</h4>
+<hr />
+<div class="row">
+    <div class="col-md-9">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CustomerId" class="form-label control-label"></label>
+                    <select asp-for="CustomerId" class ="form-select" asp-items="ViewBag.CustomerId">
+                        <option value="">-- Müşteri Seçiniz --</option>
+                    </select>
+                </div>
+                 <div class="col-md-6 mb-3">
+                    <label asp-for="ProjectName" class="form-label"></label>
+                    <input asp-for="ProjectName" class="form-control" />
+                    <span asp-validation-for="ProjectName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label asp-for="StartDate" class="form-label"></label>
+                    <input asp-for="StartDate" class="form-control" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                 <div class="col-md-4 mb-3">
+                    <label asp-for="TargetEndDate" class="form-label"></label>
+                    <input asp-for="TargetEndDate" class="form-control" />
+                    <span asp-validation-for="TargetEndDate" class="text-danger"></span>
+                </div>
+                 <div class="col-md-4 mb-3">
+                     <label asp-for="Status" class="form-label"></label>
+                    <select asp-for="Status" class="form-select">
+                        <option value="0">Devam Ediyor</option>
+                        <option value="1">Tamamlandı</option>
+                        <option value="2">Beklemede</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                 <div class="col-md-6 mb-3">
+                    <label asp-for="RevisionLimit" class="form-label"></label>
+                    <input asp-for="RevisionLimit" class="form-control" value="3" />
+                    <span asp-validation-for="RevisionLimit" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label"></label>
+                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Oluştur" class="btn btn-warning" />
+                <a asp-action="Index" class="btn btn-secondary">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

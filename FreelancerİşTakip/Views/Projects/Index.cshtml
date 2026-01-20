@@ -1,0 +1,115 @@
+@model IEnumerable<FreelancerİşTakip.Models.Project>
+
+@{
+    ViewData["Title"] = "Projeler";
+}
+
+<div class="container py-5">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-end mb-5">
+        <div>
+            <h6 class="text-uppercase tracking-widest text-warning fw-bold mb-2">Portfolio</h6>
+            <h1 class="display-4 fw-black font-playfair mb-0">Active Projects</h1>
+        </div>
+        <a asp-action="Create" class="btn btn-dark rounded-pill px-4 py-2 fw-bold tracking-wide shadow-lg hover-scale">
+            <i class="bi bi-plus-lg me-2"></i> NEW PROJECT
+        </a>
+    </div>
+
+    <!-- GRID -->
+    <div class="row g-4">
+        @if (!Model.Any()) {
+            <div class="col-12 text-center py-5">
+                <div class="empty-state p-5 rounded-4 bg-light border border-dashed">
+                    <i class="bi bi-box-seam display-1 text-secondary opacity-50"></i>
+                    <h3 class="font-playfair mt-4 text-muted fst-italic">No projects yet.</h3>
+                    <p class="text-muted small">Start by creating a proposal or manually adding a project.</p>
+                </div>
+            </div>
+        }
+
+        @foreach (var item in Model) {
+            var statusColor = item.Status == FreelancerİşTakip.Models.ProjectStatus.Completed ? "success" : 
+                              (item.Status == FreelancerİşTakip.Models.ProjectStatus.OnHold ? "secondary" : "warning"); // Active = Warning (Gold)
+            
+            var statusText = item.Status.ToString();
+            var customerInitials = item.Customer?.Name?.Substring(0, 1).ToUpper() ?? "?";
+            var progress = 45; // Placeholder for now, can be dynamic later
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden project-card-premium group-hover-lift">
+                    <!-- CARD HEADER -->
+                    <div class="card-header bg-white border-0 p-4 pb-0 d-flex justify-content-between align-items-center">
+                        <div class="customer-avatar rounded-circle bg-light text-dark fw-bold d-flex align-items-center justify-content-center border" style="width: 45px; height: 45px; font-family: 'Outfit';">
+                            @customerInitials
+                        </div>
+                        <span class="badge bg-white text-@statusColor border border-@statusColor rounded-pill px-3 py-1 small tracking-wide">
+                            <i class="bi bi-dot me-1"></i>@statusText
+                        </span>
+                    </div>
+
+                    <!-- CARD BODY -->
+                    <div class="card-body p-4">
+                        <h4 class="card-title font-playfair fw-bold mb-1 text-truncate">@item.ProjectName</h4>
+                        <p class="text-muted small font-outfit text-uppercase tracking-wider mb-4">
+                            @(item.Customer?.Name ?? "No Customer")
+                        </p>
+
+                        <!-- Timeline Visual -->
+                        <div class="timeline-box p-3 rounded-3 bg-light mb-4 border border-light">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small text-muted fw-bold">Start</span>
+                                <span class="small text-muted fw-bold">Target</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="font-outfit fw-bold">@item.StartDate.ToString("dd MMM")</span>
+                                <div class="flex-grow-1 mx-3 position-relative">
+                                    <div class="progress" style="height: 2px;">
+                                        <div class="progress-bar bg-dark" role="progressbar" style="width: 50%"></div>
+                                    </div>
+                                    <div class="position-absolute ms-100 translate-middle p-1 bg-dark rounded-circle" style="left: 50%; top: -3px;"></div>
+                                </div>
+                                <span class="font-outfit fw-bold">@item.TargetEndDate.ToString("dd MMM")</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD FOOTER / ACTION -->
+                    <div class="card-footer bg-white p-4 pt-0 border-0">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold tracking-wide hover-fill-dark">
+                            MANAGE DASHBOARD
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .font-playfair { font-family: 'Playfair Display', serif; }
+    .font-outfit { font-family: 'Outfit', sans-serif; }
+    
+    .tracking-wide { letter-spacing: 1px; }
+    .tracking-wider { letter-spacing: 2px; }
+    .tracking-widest { letter-spacing: 3px; }
+
+    .fw-black { font-weight: 900; }
+    
+    .hover-scale { transition: transform 0.3s; }
+    .hover-scale:hover { transform: scale(1.05); }
+
+    .project-card-premium {
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .group-hover-lift:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important;
+    }
+
+    .hover-fill-dark:hover {
+        background-color: #212529;
+        color: white;
+    }
+</style>
+
